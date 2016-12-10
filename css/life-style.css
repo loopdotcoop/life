@@ -1,0 +1,32 @@
+/* Typography */
+body {
+    margin: 0 3em;
+    background: #d8d8d8;
+    color: #333;
+    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-size: 62.5%; /* font-size 1em = 10px on default browser settings */
+}
+a {
+    color: #33cc66;
+    transition: color 0.5s;
+    outline: none!important; /* Firefox */
+}
+a:hover {
+    color: #ff00ff;
+}
+h1, h2, h3, h4 {
+    margin-bottom: 0.2em;
+    color: #669977;
+    font-family: Podkova, 'Open Sans', Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}
+h1 { font-size: 5.5em; }
+h2 { font-size: 4.0em; }
+h3 { font-size: 2.8em; }
+h4 { font-size: 2.0em; }
+p, ul, ol, pre { font-size: 1.5em; }
+ul p, ol p { font-size: 1em; }
+
+.anchor {
+  margin-right: 6px;
+}
