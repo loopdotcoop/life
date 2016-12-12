@@ -1,12 +1,12 @@
 /* -------------------------------------------------------------------------- */
-/* The starter-unit, which loads and initialises the other LIFE units.        */
+/* Configuration for all LIFE units.                                          */
 /* -------------------------------------------------------------------------- */
-!function (ROOT, LIFE) { 'use strict'; var FILE='src/life-boot.js'        //@CUT
-!function () { var UNIT='boot'
+!function (ROOT, LIFE) { 'use strict'; var FILE='src/life-config.js'      //@CUT
+!function () { var UNIT='config'
 
   //// Stash any predefined API which may exist. A developer can partially or
-  //// completely customise this unit by predefining LIFE.boot. We need to keep
-  //// a reference to the predefined API for `reset()` to use.
+  //// completely customise this unit by predefining LIFE.config. We need to
+  //// keep a reference to the predefined API for `reset()` to use.
   var predefinedAPI = validateAPI(LIFE[UNIT] || {})
   if (~~predefinedAPI) return // signifies that the predefined API is invalid
 
@@ -16,21 +16,16 @@
     //// Standard methods.
     reset: reset
    ,init:  init
-   ,main:  main
 
-    //// Specify which units to load - order does not matter.
-   ,manifest: {
-      config: { is:'booting', src:'js/life-config.js' }
+    ////
+   ,someunit: {
+      somepref: 123
     }
 
   } // defaultAPI
 
   //// `reset()` deletes everything from the API, and then rebuilds it.
   reset()
-
-  //// LIFE.boot is the only unit which calls its own `init()`. This begins the
-  //// process of starting the app (aka bootstrapping).
-  init()
 
 
 
@@ -54,7 +49,7 @@
 
 
   //// `main()` is @todo describe.
-  function main () {} //@todo announce.ready()
+  // function main () {} //@todo announce.ready()
 
 
 
@@ -62,22 +57,15 @@
   //// STANDARD PRIVATE METHODS
 
 
-  //// `validateAPI()` checks that any predefined API has no obvious errors.
+  //// `validateAPI()` is @todo describe.
   function validateAPI (api, key, val, rx) {
-
-    //// Validate any predefined manifest values.
-    rx = /^[-.a-z0-9\/]+.js$/
-    for (key in api.manifest) {
-      val = api.manifest[key]
-      if ('booting' !== val.is) return fail(UNIT, 'Invalid manifest.'+key
-        +'.is: "'+val.is+'" should be "booting"', 6478)
-      if (! rx.test(val.src) ) return fail(UNIT, 'Invalid manifest.'+key
-        +'.src: "'+val.src+'" fails '+rx, 2219)
-    }
-
+    //@todo validation
     return api // signifies success
   }
 
+
+  //// Let LIFE.boot know that this unit has loaded, and should be initialised.
+  // if (LIFE.boot) LIFE.boot.announce.loaded(NAME)
 
 }()
 function softCopy(s,f,k,v){for(k in f){v=f[k];if('object'==typeof v){if(  //@CUT
