@@ -1,0 +1,27 @@
+{
+  "name": "life",
+  "version": "0.0.2",
+  "description": "Loop.Coop Industrial Front End: an open source JavaScript application framework.",
+  "main": "dist/life.js",
+  "scripts": {
+    "test": "node test.js",
+    "make": "node make.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loopdotcoop/life.git"
+  },
+  "keywords": [
+    "front-end",
+    "framework"
+  ],
+  "author": "Rich Plastow <rich@richplastow.com> (http://richplastow.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/loopdotcoop/life/issues"
+  },
+  "homepage": "http://life.loop.coop/",
+  "devDependencies": {
+    "uglify-js": "^2.7.5"
+  }
+}
