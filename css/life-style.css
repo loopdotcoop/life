@@ -10,6 +10,7 @@ a {
     color: #33cc66;
     transition: color 0.5s;
     outline: none!important; /* Firefox */
+    text-decoration: none;
 }
 a:hover {
     color: #ff00ff;

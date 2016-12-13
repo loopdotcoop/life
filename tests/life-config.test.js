@@ -15,7 +15,7 @@ module.exports = config => {
 
 
 
-    //// SINGLE FILE
+    //// SINGLE SCRIPTS
 
     //// LIFE.config existance before/after being `require()`d and after deletion.
     () => {
