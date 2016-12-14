@@ -15,6 +15,7 @@ module.exports = config => {
 
 
 
+
     //// SINGLE SCRIPTS
 
     //// LIFE.boot existance before/after being `require()`d and after deletion.
@@ -48,11 +49,11 @@ module.exports = config => {
       delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
 
       global.LIFE = { boot: { manifest: {
-        config: { is:'booting', src:'custom/src/here.js' }
+        config: { is:'booting', src:'inline' }
       } } }
       require('../src/life-boot.js')
       a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'custom/src/here.js' },
+        { is:'booting', src:'inline' },
         "LIFE.boot should prefer preexisting manifest values")
 
       global.LIFE.boot.manifest.config.src = 'probably bad to change this'
@@ -62,7 +63,7 @@ module.exports = config => {
 
       global.LIFE.boot.reset()
       a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'custom/src/here.js' },
+        { is:'booting', src:'inline' },
         "After `reset()`, LIFE.boot.manifest regains previous custom values")
 
       delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
@@ -73,7 +74,7 @@ module.exports = config => {
       require('../src/life-boot.js')
       a.strictEqual(global.msg,
         'src/life-boot.js boot#2219\n  Invalid manifest.config.src: "nope, this'
-          +' is invalid!" fails /^[-.a-z0-9\\/]+.js$/',
+          +' is invalid!" fails /^[-.a-z0-9\\/]+.js$|^inline$/',
         'Should fail if a manifest `src` value is invalid')
 
       delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
@@ -88,6 +89,7 @@ module.exports = config => {
         'Should fail if a manifest `is` value is invalid')
 
     },
+
 
 
 
@@ -118,7 +120,7 @@ module.exports = config => {
 
       require('../dist/life.js')
       a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'js/life-config.js' },
+        { is:'booting', src:'inline' },
         "Default LIFE.boot.manifest.config value as expected")
 
       delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
@@ -149,7 +151,7 @@ module.exports = config => {
       require('../dist/life.js')
       a.strictEqual(global.msg,
         'dist/life.js boot#2219\n  Invalid manifest.config.src: "nope, this'
-          +' is invalid!" fails /^[-.a-z0-9\\/]+.js$/',
+          +' is invalid!" fails /^[-.a-z0-9\\/]+.js$|^inline$/',
         'Should fail if a manifest `src` value is invalid')
 
       delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
@@ -164,6 +166,7 @@ module.exports = config => {
         'Should fail if a manifest `is` value is invalid')
 
     },
+
 
 
 
@@ -194,7 +197,7 @@ module.exports = config => {
 
       require('../dist/life.min.js')
       a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'js/life-config.js' },
+        { is:'booting', src:'inline' },
         "Default LIFE.boot.manifest.config value as expected")
 
       delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
@@ -239,6 +242,7 @@ module.exports = config => {
 
       delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
     },
+
 
   ];
 

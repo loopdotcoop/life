@@ -25,7 +25,7 @@
 
   } // defaultAPI
 
-  //// `reset()` deletes everything from the API, and then rebuilds it.
+  //// Delete everything from the API, and then rebuild it.
   reset()
 
   //// LIFE.boot is the only unit which calls its own `init()`. This begins the
@@ -66,7 +66,7 @@
   function validateAPI (api, key, val, rx) {
 
     //// Validate any predefined manifest values.
-    rx = /^[-.a-z0-9\/]+.js$/
+    rx = /^[-.a-z0-9\/]+.js$|^inline$/
     for (key in api.manifest) {
       val = api.manifest[key]
       if ('booting' !== val.is) return fail(UNIT, 'Invalid manifest.'+key

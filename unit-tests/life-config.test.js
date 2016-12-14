@@ -15,6 +15,7 @@ module.exports = config => {
 
 
 
+
     //// SINGLE SCRIPTS
 
     //// LIFE.config existance before/after being `require()`d and after deletion.
@@ -60,6 +61,7 @@ module.exports = config => {
 
 
 
+
     //// CONCATENATED
 
     //// LIFE.config existance before/after being `require()`d and after deletion.
@@ -102,6 +104,7 @@ module.exports = config => {
         "LIFE.config.someunit should not overwrite predefined values")
 
     },
+
 
 
 

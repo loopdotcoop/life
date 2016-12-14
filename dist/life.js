@@ -1,3 +1,4 @@
+//// life@0.0.4 http://life.loop.coop/ 
 !function (ROOT, LIFE) { 'use strict'; var FILE='dist/life.js'
 
 /* -------------------------------------------------------------------------- */
@@ -21,12 +22,12 @@
 
     //// Specify which units to load - order does not matter.
    ,manifest: {
-      config: { is:'booting', src:'js/life-config.js' }
+      config: { is:'booting', src:'inline' }
     }
 
   } // defaultAPI
 
-  //// `reset()` deletes everything from the API, and then rebuilds it.
+  //// Delete everything from the API, and then rebuild it.
   reset()
 
   //// LIFE.boot is the only unit which calls its own `init()`. This begins the
@@ -67,7 +68,7 @@
   function validateAPI (api, key, val, rx) {
 
     //// Validate any predefined manifest values.
-    rx = /^[-.a-z0-9\/]+.js$/
+    rx = /^[-.a-z0-9\/]+.js$|^inline$/
     for (key in api.manifest) {
       val = api.manifest[key]
       if ('booting' !== val.is) return fail(UNIT, 'Invalid manifest.'+key

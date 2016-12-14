@@ -3,7 +3,11 @@
 /* ‘dist/life.js’ and ‘dist/life.min.js’.                                     */
 /* -------------------------------------------------------------------------- */
 
-const fs = require('fs')
+const PACKAGE  = require('./package.json')
+    , NAME     = PACKAGE.name
+    , VERSION  = PACKAGE.version
+    , HOMEPAGE = PACKAGE.homepage
+    , fs = require('fs')
     , path = require('path')
     , uglify = require('uglify-js') // probs? Try `$ npm install -g uglify-js`
     , allNames = fs.readdirSync('src')
@@ -41,11 +45,25 @@ maxs.forEach( (max, i) => {
 })
 
 //// Modify 'boot' so that it expects units to be loaded inline.
-////@todo
+maxs.forEach ( (max, i) => {
+  if ('life-boot.js' === srcNames[i]) {
+    srcNames.forEach( srcname => {
+      maxs[i] = maxs[i].replace(
+        RegExp(
+          [
+            "{","is",":","'booting'",",","src",":",`'js/${srcname}'`,"}"
+          ].join('\\s*')
+        )
+       ,"{ is:'booting', src:'inline' }"
+      )
+    })
+  }
+})
 
 //// Top and tail the concatenated JavaScript.
 maxs.unshift(
-  "!function (ROOT, LIFE) { 'use strict'; var FILE='dist/life.js'"
+  `//// ${NAME}@${VERSION} ${HOMEPAGE} \n`
+ +"!function (ROOT, LIFE) { 'use strict'; var FILE='dist/life.js'"
 )
 maxs.push(
   "function softCopy (subject, fallback, key, val) { // doesn’t overwrite\n"
@@ -106,7 +124,10 @@ const min = uglify.minify( maxs.join('\n\n'), {
   }
 })
 
-fs.writeFileSync( path.resolve('dist', 'life.min.js'), min.code )
+fs.writeFileSync(
+  path.resolve('dist', 'life.min.js')
+ ,`//// ${NAME}@${VERSION} ${HOMEPAGE} \n${min.code}`
+)
 // fs.writeFileSync( path.resolve('dist', 'life.min.map.js'), min.map )
 
 //// Calculate and display the amount of compression.
