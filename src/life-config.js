@@ -38,8 +38,8 @@
     //// Start with a blank slate, then add members from the stashed custom API,
     //// and then add any missing members.
     api = LIFE[UNIT] = {}
-    softCopy(api, predefinedAPI)
-    softCopy(api, defaultAPI)
+    COPY(api, predefinedAPI)
+    COPY(api, defaultAPI)
 
   }
 
@@ -68,11 +68,13 @@
   // if (LIFE.boot) LIFE.boot.announce.loaded(NAME)
 
 }()
-function softCopy(s,f,k,v){for(k in f){v=f[k];if('object'==typeof v){if(  //@CUT
-null==s[k])s[k]='[object Array]'==Object.prototype.toString.call(v)?[]:{} //@CUT
-softCopy(s[k],v)}else{if(null==s[k])s[k]=v}}};function fail(u,m,n){(ROOT. //@CUT
-w80a||ROOT.alert||NOP)(FILE+' '+u+'#'+(n?n+'\n  '+m:m));return (n?n:m)}   //@CUT
-                                                         function NOP(){} //@CUT
+function SAFE(v,t){return t=t||typeof v,null==v||"number"==t||"boolean"==t//@CUT
+?"`"+v+"`":(v+="",'"'+(17>v.length?v:v.slice(0,8)+"..."+v.slice(-5))+'"')}//@CUT
+function COPY(s,f,k,v){for(k in f){v=f[k];if('object'==typeof v){if(null==//@CUT
+s[k])s[k]='[object Array]'==Object.prototype.toString.call(v)?[]:{}       //@CUT
+COPY(s[k],v)}else{if(null==s[k])s[k]=v}}};function FAIL(f,t,c){(ROOT.w80a //@CUT
+||ROOT.alert||NOOP)(FILE+' '+(t?f+'#'+c+'\n  '+t:'#'+f));return t?c:f}    //@CUT
+function NOOP(){}                                                         //@CUT
 
 }( 'object' == typeof global ? global : this, 'object' == typeof global ? //@CUT
     global.LIFE = global.LIFE || {} : this.LIFE = this.LIFE || {} )       //@CUT

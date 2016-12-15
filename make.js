@@ -24,7 +24,7 @@ allNames.forEach( allName => {
 
 //// Check that error codes are unique.
 maxs.forEach( (max, i) => {
-  const fails = max.match(/\sfail\s*\(([^\)]+,\s*\d{4}\s*)\)/mg)
+  const fails = max.match(/\sFAIL\s*\(([^\)]+,\s*\d{4}\s*)\)/mg)
   if (! fails) return
   fails.forEach( (fail, j) => {
     if (! fail) return
@@ -66,24 +66,32 @@ maxs.unshift(
  +"!function (ROOT, LIFE) { 'use strict'; var FILE='dist/life.js'"
 )
 maxs.push(
-  "function softCopy (subject, fallback, key, val) { // doesn’t overwrite\n"
+  "//// LIFE helper functions are easy to recognise - they are all uppercase,\n"
+ +"//// and all four characters long.\n"
+ +"function SAFE (v,t) { // makes any kind of variable safe for logging\n"
+ +"  t = t || typeof v\n"
+ +"  if ( null == v || 'number' == t || 'boolean' == t ) return '`'+v+'`'\n"
+ +"  v += '' // convert `v` to a string\n"
+ +"  return '\"'+( 17 > v.length ? v : v.slice(0,8)+'...'+v.slice(-5) )+'\"'\n"
+ +"}\n"
+ +"function COPY (subject, fallback, key, val) { // doesn’t overwrite data\n"
  +"  for (key in fallback) {\n"
  +"    val = fallback[key]\n"
  +"    if ('object' == typeof val) {\n"
  +"      if (null == subject[key])\n"
  +"        subject[key] =\n"
  +"          '[object Array]' == Object.prototype.toString.call(val)?[]:{}\n"
- +"      softCopy(subject[key], val)\n"
+ +"      COPY(subject[key], val)\n"
  +"    } else {\n"
  +"      if (null == subject[key]) subject[key] = val\n"
  +"    }\n"
  +"  }\n"
  +"}\n"
- +"function fail (unit, tx, num) { // with 2 args, `tx` is treated as `num`\n"
- +"  (ROOT.w80a||ROOT.alert||NOP)(FILE+' '+unit+'#'+(num?num+'\\n  '+tx:tx))\n"
- +"  return (num ? num : tx)\n"
+ +"function FAIL (fn, tx, cd) { // with 1 arg, `fn` is treated as `cd`\n"
+ +"  (ROOT.w80a||ROOT.alert||NOOP)(FILE+' '+(tx?fn+'#'+cd+'\\n  '+tx:'#'+fn))\n"
+ +"  return (tx ? cd : fn)\n"
  +"}\n"
- +"function NOP () {} // no operation\n\n"
+ +"function NOOP () {} // no operation\n\n"
  +"}( 'object' == typeof global ? global : this, // Node’s root, else window \n"
  +"   'object' == typeof global ? // create the LIFE object if not predefined\n"
  +"     global.LIFE = global.LIFE || {} : this.LIFE = this.LIFE || {} )\n"
@@ -93,12 +101,18 @@ maxs.push(
 fs.writeFileSync( path.resolve('dist', 'life.js'), maxs.join('\n\n') )
 console.log(`Created dist/life.js from ${maxs.length} sources`)
 
-//// Remove the message argument of `fail()` calls, leaving the unit and code.
+//// Remove the function-name and message arguments of `FAIL()` calls, leaving
+//// just the fail-code.
 maxs.forEach( (max, i) => {
-  maxs[i] = max.replace(
-    /\sfail\s*\([^\)]+,\s*(\d{4})\s*\)/mg
-   ,(match, code) => ' fail(UNIT,' + code + ') '
-  )
+  if (i == maxs.length-1) return // `FAIL()` definition, just added above
+  var parts=max.split(/\s+FAIL\s*\(/), j, part, match
+  for (j=1; part=parts[j]; j++) { // `j=1`, so skip the first part
+    match = part.match(/\s*,\s*(\d{4})\s*\)/)
+    if (null === match)
+      throw Error(`FAIL() #${j} in ${srcNames[i-1]} has an invalid error-code`)
+    parts[j] = ` FAIL(${match[1]})${part.substr(match.index+match[0].length)}`
+  }
+  maxs[i] = parts.join('')
 })
 
 //// Change the `FILE` variable to the minified filename.
@@ -107,12 +121,23 @@ maxs.unshift(
   "!function (ROOT, LIFE) { 'use strict'; var FILE='dist/life.min.js'"
 )
 
+//// Hack Uglify, to avoid warnings we don’t care about.
+var origWarn = uglify.AST_Node.warn;
+uglify.AST_Node.warn = function(txt, props) {
+  if (! (
+       'Dropping unused variable {name} [{file}:{line},{col}]' == txt
+    && 'FN' == props.name // 'WARN: Dropping unused variable FN [...]'
+  ) ) origWarn(txt, props)
+};
+
 //// Minify the concatenated JavaScript, and write it to disk.
 const min = uglify.minify( maxs.join('\n\n'), {
   fromString: true,
   outFileName: path.resolve('dist', 'life.min.js'),
   // outSourceMap: path.resolve('dist', 'life.min.map.js'),
   warnings: true,
+  // drop_console: true,
+  // passes: 4,
   output: {
     max_line_len: 64 // easier on the eye - but 500 would be a safe maximum
   },

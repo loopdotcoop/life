@@ -71,6 +71,8 @@ module.exports = config => {
       a.strictEqual(typeof global.LIFE, 'undefined',
         "global.LIFE should not exist before `require('../dist/life.js')`")
 
+      global.LIFE = { config: { isBot: true } } // don’t load other units
+
       require('../dist/life.js')
       a.strictEqual(typeof global.LIFE.config,
         'object',
@@ -87,6 +89,8 @@ module.exports = config => {
     //// LIFE.config
     () => {
       delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
+
+      global.LIFE = { config: { isBot: true } } // don’t load other units
 
       require('../dist/life.js')
       a.deepEqual(global.LIFE.config.someunit,
@@ -117,6 +121,8 @@ module.exports = config => {
       a.strictEqual(typeof global.LIFE, 'undefined',
         "global.LIFE should not exist before `require('../dist/life.min.js')`")
 
+      global.LIFE = { config: { isBot: true } } // don’t load other units
+
       require('../dist/life.min.js')
       a.strictEqual(typeof global.LIFE.config,
         'object',
@@ -133,6 +139,8 @@ module.exports = config => {
     //// LIFE.config
     () => {
       delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
+
+      global.LIFE = { config: { isBot: true } } // don’t load other units
 
       require('../dist/life.min.js')
       a.deepEqual(global.LIFE.config.someunit,
