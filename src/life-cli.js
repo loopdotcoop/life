@@ -1,31 +1,39 @@
 /* -------------------------------------------------------------------------- */
-/* Configuration for all LIFE units.                                          */
+/* The command line interface at the heart of all LIFE operations.            */
 /* -------------------------------------------------------------------------- */
-!function (ROOT, LIFE) { 'use strict'; var FILE='src/life-config.js'      //@CUT
-!function () { var UNIT='config'
+!function (ROOT, LIFE) { 'use strict'; var FILE='src/life-cli.js'         //@CUT
+!function () { var UNIT='cli'
 
   //// Stash any predefined API which may exist. A developer can partially or
-  //// completely customise this unit by predefining LIFE.config. We need to
-  //// keep a reference to the predefined API for `reset()` to use.
+  //// completely customise this unit by predefining LIFE.cli. We need to keep
+  //// a reference to the predefined API for `reset()` to use.
   var predefinedAPI = validateAPI(LIFE[UNIT] || {})
   if (~~predefinedAPI) return // signifies that the predefined API is invalid
 
   //// Declare the API, and define its defaults.
-  var api, defaultAPI = {
+  var cli, config, defaultAPI = {
+
+    //// Configuration.
+    config: {
+
+      width : 80 // number of characters per line
+     ,height: 24 // number of lines per page
+
+    }
 
     //// Standard methods.
-    reset: reset
+   ,reset: reset
    ,init:  init
-
-    ////
-   ,someunit: {
-      somepref: 123
-    }
+   ,main:  main
 
   } // defaultAPI
 
-  //// `reset()` deletes everything from the API, and then rebuilds it.
+
+  //// Delete everything from the API, and then rebuild it.
   reset()
+
+  //// Let LIFE.boot know that this unit has loaded, and should be initialised.
+  // if (LIFE.boot) LIFE.boot.announce.loaded(NAME)
 
 
 
@@ -37,9 +45,10 @@
 
     //// Start with a blank slate, then add members from the stashed custom API,
     //// and then add any missing members.
-    api = LIFE[UNIT] = {}
-    COPY(api, predefinedAPI)
-    COPY(api, defaultAPI)
+    cli = LIFE[UNIT] = {}
+    COPY(cli, predefinedAPI)
+    COPY(cli, defaultAPI)
+    config = cli.config
 
   }
 
@@ -49,23 +58,30 @@
 
 
   //// `main()` is @todo describe.
-  // function main () {} //@todo announce.ready()
+  function main () {} //@todo announce.ready()
 
 
 
 
   //// STANDARD PRIVATE METHODS
 
+  //// `validateAPI()` checks that any predefined API has no obvious errors.
+  function validateAPI (api, cg, val) { var FN = UNIT+':validateAPI() '
+    cg = api.config || {}
 
-  //// `validateAPI()` is @todo describe.
-  function validateAPI (api, key, val, rx) {
-    //@todo validation
+    //// Validate any predefined width and height.
+    val = cg.width
+
+    if (null != val)
+      if (val !== ~~val || 0 > val) return FAIL(FN, 'Invalid config.width '
+        +SAFE(val)+' should be a positive integer greater than zero', 9102)
+    val = cg.height
+    if (null != val)
+      if (val !== ~~val || 0 > val) return FAIL(FN, 'Invalid config.height '
+        +SAFE(val)+' should be a positive integer greater than zero', 4471)
+
     return api // signifies success
   }
-
-
-  //// Let LIFE.boot know that this unit has loaded, and should be initialised.
-  // if (LIFE.boot) LIFE.boot.announce.loaded(NAME)
 
 }()
 function SAFE(v,t){return t=t||typeof v,null==v||"number"==t||"boolean"==t//@CUT

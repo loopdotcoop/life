@@ -6,314 +6,187 @@ const FILE = 'tests/life-boot.test.js'
     , UNIT = 'boot'
     , a = require('assert')
     , purgeCache = require('./test-utilities.js').purgeCache
-;
+
+global.msg = null
 
 module.exports = config => {
 
-  //// The first few tests are for the unit’s properties.
   const tests = [
 
 
-
-
-    //// SINGLE SCRIPTS
-
-    //// LIFE.boot existance before/after being `require()`d and after deletion.
+    //// LIFE should not currently exist.
     () => {
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
       a.strictEqual(typeof global.LIFE, 'undefined',
-        "global.LIFE should not exist before `require('../src/life-boot.js')`")
-
-      global.LIFE = { config: { isBot: true } } // don’t load other units
-
-      require('../src/life-boot.js')
-      a.strictEqual(typeof global.LIFE.boot,
-        'object',
-        "boot should be an object after `require('../src/life-boot.js')`")
-
-      delete global.LIFE.boot
-      a.strictEqual(typeof global.LIFE.boot,
-        'undefined',
-        "boot should be an undefined after `delete global.LIFE.boot`")
-    },
-
-    //// LIFE.boot.wait
-    () => {
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-      global.LIFE = { config: { isBot: true } } // don’t load other units
-
-      require('../src/life-boot.js')
-      a.deepEqual(global.LIFE.boot.wait,
-        { head: 250, body: 1000, load: 2000 },
-        "Default LIFE.boot.wait value as expected")
-
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
-      global.LIFE = { boot: { wait: { body:123 } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../src/life-boot.js')
-      a.deepEqual(global.LIFE.boot.wait,
-        { head: 250, body: 123, load: 2000 },
-        "LIFE.boot should prefer preexisting wait values")
-
-      global.LIFE.boot.wait.load = 'definitely bad to change this'
-      a.deepEqual(global.LIFE.boot.wait,
-        { head: 250, body: 123, load: 'definitely bad to change this' },
-        "It’s possible (not recommended) to change wait values on-the-fly")
-
-      global.LIFE.boot.reset()
-      a.deepEqual(global.LIFE.boot.wait,
-        { head: 250, body: 123, load: 2000 },
-        "After `reset()`, LIFE.boot.wait regains previous custom values")
-
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
-      global.LIFE = { boot: { wait: { body:'123' } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../src/life-boot.js')
-      a.strictEqual(global.msg,
-        'src/life-boot.js boot:validateAPI() #8826\n  Invalid wait.body'
-          +' "123" should be a positive integer greater than zero',
-        'Should fail if a wait value is invalid')
-/*
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'loading', src:'another/valid-src.here.js' }
-      } } }
-
-      require('../src/life-boot.js')
-      a.strictEqual(global.msg,
-        'src/life-boot.js boot:validateAPI() #6478\n'
-          +'  Invalid manifest.config.is: "loading" should be "booting"',
-        'Should fail if a manifest `is` value is invalid')
-*/
-    },
-
-    //// LIFE.boot.manifest
-    () => {
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-      global.LIFE = { config: { isBot: true } } // don’t load other units
-
-      require('../src/life-boot.js')
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'js/life-config.js' },
-        "Default LIFE.boot.manifest.config value as expected")
-
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'booting', src:'inline' }
-      } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../src/life-boot.js')
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'inline' },
-        "LIFE.boot should prefer preexisting manifest values")
-
-      global.LIFE.boot.manifest.config.src = 'probably bad to change this'
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'probably bad to change this' },
-        "It’s possible (not recommended) to change manifest values on-the-fly")
-
-      global.LIFE.boot.reset()
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'inline' },
-        "After `reset()`, LIFE.boot.manifest regains previous custom values")
-
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'booting', src:'nope, this is invalid!' }
-      } } }
-
-      require('../src/life-boot.js')
-      a.strictEqual(global.msg,
-        'src/life-boot.js boot:validateAPI() #2219\n'
-          +'  Invalid manifest.config.src: "nope, th...alid!"'
-          +' fails /^[-.a-z0-9\\/]+.js$|^inline$/',
-        'Should fail if a manifest `src` value is invalid')
-
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'loading', src:'another/valid-src.here.js' }
-      } } }
-
-      require('../src/life-boot.js')
-      a.strictEqual(global.msg,
-        'src/life-boot.js boot:validateAPI() #6478\n'
-          +'  Invalid manifest.config.is: "loading" should be "booting"',
-        'Should fail if a manifest `is` value is invalid')
-
+        "global.LIFE should not exist before `require()`")
     },
 
 
-
-
-    //// CONCATENATED
-
-    //// LIFE.boot existance before/after being `require()`d and after deletion.
+    //// LIFE.cli exists after being `require()`d.
     () => {
-      delete global.LIFE; global.msg = null; purgeCache('../src/life-boot.js')
-
-      a.strictEqual(typeof global.LIFE, 'undefined',
-        "global.LIFE should not exist before `require('../dist/life.js')`")
-
-      global.LIFE = { config: { isBot: true } } // don’t load other units
-
-      require('../dist/life.js')
-      a.strictEqual(typeof global.LIFE.boot,
-        'object',
-        "boot should be an object after `require('../dist/life.js')`")
-
-      delete global.LIFE.boot
-      a.strictEqual(typeof global.LIFE.boot,
-        'undefined',
-        "boot should be an undefined after `delete global.LIFE.boot`")
+      const test = (path) => {
+        require('../' + path)
+        a.strictEqual(global.msg, null, "Should not fail")
+        a.strictEqual(typeof global.LIFE.boot,
+          'object',
+          "boot should be an object after `require('" + path + "')`")
+        delete global.LIFE; global.msg = null; purgeCache('../' + path)
+      }
+      test('src/life-boot.js')
+      test('dist/life.js')
+      test('dist/life.min.js')
     },
 
 
-    //// LIFE.boot.manifest
+    //// Default LIFE.boot.config as expected.
     () => {
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
+      const test = (path, src) => {
+        require('../' + path)
+        a.strictEqual(global.msg, null, "Should not fail")
+        a.deepEqual(global.LIFE.boot.config,
+{
 
-      global.LIFE = { config: { isBot: true } } // don’t load other units
+  isBot      : false // useful for developing the <NOSCRIPT> bot-view
+ ,defeatCache: true  // whether to append random query-string to 'src' attribs
 
-      require('../dist/life.js')
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'inline' },
-        "Default LIFE.boot.manifest.config value as expected")
+ ,wait: {
+    head:  250 // milliseconds to wait before finding <HEAD> fails
+   ,body: 1000 // milliseconds to wait before finding <BODY> fails
+   ,load: 2000 // milliseconds of inaction to allow before load fails
+  }
 
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
+  //// Specify which units to load - order does not matter.
+ ,manifest: {
+    cli: { is:'booting', src: src || 'js/life-cli.js' }
+  }
 
-      global.LIFE = { boot: { manifest: {
-        config: { is:'booting', src:'custom/src/here.js' }
-      } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../dist/life.js')
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'custom/src/here.js' },
-        "LIFE.boot should prefer preexisting manifest values")
+}
 
-      global.LIFE.boot.manifest.config.src = 'probably bad to change this'
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'probably bad to change this' },
-        "It’s possible (not recommended) to change manifest values on-the-fly")
-
-      global.LIFE.boot.reset()
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'custom/src/here.js' },
-        "After `reset()`, LIFE.boot.manifest regains previous custom values")
-
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'booting', src:'nope, this is invalid!' }
-      } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../dist/life.js')
-      a.strictEqual(global.msg,
-        'dist/life.js boot:validateAPI() #2219\n  '
-          +'Invalid manifest.config.src: "nope, th...alid!"'
-          +' fails /^[-.a-z0-9\\/]+.js$|^inline$/',
-        'Should fail if a manifest `src` value is invalid')
-
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'loading', src:'another/valid-src.here.js' }
-      } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../dist/life.js')
-      a.strictEqual(global.msg,
-        'dist/life.js boot:validateAPI() #6478\n  '
-          +'Invalid manifest.config.is: "loading" should be "booting"',
-        'Should fail if a manifest `is` value is invalid')
-
+         ,"Default LIFE.boot.config values as expected")
+        delete global.LIFE; global.msg = null; purgeCache('../' + path)
+      }
+      test('src/life-boot.js')
+      test('dist/life.js', 'inline')
+      test('dist/life.min.js', 'inline')
     },
 
 
-
-
-    //// MINIFIED
-
-    //// LIFE.boot existance before/after being `require()`d and after deletion.
+    //// Keep predefined LIFE.boot.config values, whether recognised or not.
     () => {
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.js')
-
-      a.strictEqual(typeof global.LIFE, 'undefined',
-        "global.LIFE should not exist before `require('../dist/life.min.js')`")
-
-      global.LIFE = { config: { isBot: true } } // don’t load other units
-
-      require('../dist/life.min.js')
-      a.strictEqual(typeof global.LIFE.boot,
-        'object',
-        "boot should be an object after `require('../dist/life.min.js')`")
-
-      delete global.LIFE.boot
-      a.strictEqual(typeof global.LIFE.boot,
-        'undefined',
-        "boot should be an undefined after `delete global.LIFE.boot`")
+      const test = (path) => {
+        global.LIFE = { boot: { config: {
+          wait: { body:123 }
+         ,foo: true // not recognised
+         ,manifest: {
+            cli: { is:'booting', src:'this/is/valid-src.here.js' }
+         }
+        } } }
+        global.LIFE.boot.config.isBot = true // don’t load units
+        require('../' + path)
+        a.strictEqual(global.msg, null, "Should not fail")
+        a.deepEqual(global.LIFE.boot.config.wait,
+          { head: 250, body: 123, load: 2000 },
+          "LIFE.boot should prefer preexisting wait values")
+        a.deepEqual(global.LIFE.boot.config.manifest.cli,
+          { is:'booting', src:'this/is/valid-src.here.js' },
+          "LIFE.boot should prefer preexisting manifest values")
+        a.strictEqual(global.LIFE.boot.config.foo, true,
+          "LIFE.boot should preserve preexisting config, even if unrecognised")
+        delete global.LIFE; global.msg = null; purgeCache('../' + path)
+      }
+      test('src/life-boot.js')
+      test('dist/life.js')
+      test('dist/life.min.js')
     },
 
 
-    //// LIFE.boot.manifest
+    //// reset() to previously-defined custom values, after a direct ‘bad edit’.
     () => {
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
+      const test = (path) => {
+        global.LIFE = { boot: { config: { wait: { load:456 } } } }
+        global.LIFE.boot.config.isBot = true // don’t load units
+        require('../' + path)
+        global.LIFE.boot.config.wait.load = 'definitely bad to edit like this'
+        a.strictEqual(global.msg, null, "Should not fail")
+        a.deepEqual(global.LIFE.boot.config.wait,
+          { head: 250, body: 1000, load: 'definitely bad to edit like this' },
+          "It’s possible (not recommended) to change wait values on-the-fly")
+        global.LIFE.boot.reset()
+        a.deepEqual(global.LIFE.boot.config.wait,
+          { head: 250, body: 1000, load: 456 },
+          "After `reset()`, boot.config.wait regains previous custom values")
+        delete global.LIFE; global.msg = null; purgeCache('../' + path)
+      }
+      test('src/life-boot.js')
+      test('dist/life.js')
+      test('dist/life.min.js')
+    },
 
-      global.LIFE = { config: { isBot: true } } // don’t load other units
-      require('../dist/life.min.js')
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'inline' },
-        "Default LIFE.boot.manifest.config value as expected")
 
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
+    //// Failed custom LIFE.cli.config.wait.head
+    () => {
+      const code = 8826
+      const test = (path, isMin, text) => {
+        global.LIFE = { boot: { config: { wait: { head:RegExp('abc') } } } }
+        require('../' + path)
+        a.notStrictEqual(global.msg, null, "Should fail")
+        if (isMin)
+          text = '#'+code
+        else
+          text = 'boot:validateAPI() #' + code + '\n  Invalid config.wait.head'
+            + ' "/abc/" should be a positive integer greater than zero'
+        a.strictEqual(global.msg, `${path} ${text}`)
+        delete global.LIFE; global.msg = null; purgeCache('../' + path)
+      }
+      test('src/life-boot.js')
+      test('dist/life.js')
+      test('dist/life.min.js', true)
+    },
 
-      global.LIFE = { boot: { manifest: {
-        config: { is:'booting', src:'custom/src/here.js' }
-      } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../dist/life.min.js')
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'custom/src/here.js' },
-        "LIFE.boot should prefer preexisting manifest values")
 
-      global.LIFE.boot.manifest.config.src = 'probably bad to change this'
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'probably bad to change this' },
-        "It’s possible (not recommended) to change manifest values on-the-fly")
+    //// Failed custom LIFE.cli.config.manifest.is
+    () => {
+      const code = 6478
+      const test = (path, isMin, text) => {
+        global.LIFE = { boot: { config: { manifest: {
+          cli: { is:'loading', src:'this/is/valid-src.here.js' }
+        } } } }
+        require('../' + path)
+        a.notStrictEqual(global.msg, null, "Should fail")
+        if (isMin)
+          text = '#'+code
+        else
+          text = 'boot:validateAPI() #' + code + '\n  Invalid config.manifest.'
+            + 'cli.is "loading" should be "booting"'
+        a.strictEqual(global.msg, `${path} ${text}`)
+        delete global.LIFE; global.msg = null; purgeCache('../' + path)
+      }
+      test('src/life-boot.js')
+      test('dist/life.js')
+      test('dist/life.min.js', true)
+    },
 
-      global.LIFE.boot.reset()
-      a.deepEqual(global.LIFE.boot.manifest.config,
-        { is:'booting', src:'custom/src/here.js' },
-        "After `reset()`, LIFE.boot.manifest regains previous custom values")
 
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'booting', src:'nope, this is invalid!' }
-      } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../dist/life.min.js')
-      a.strictEqual(global.msg,
-        'dist/life.min.js #2219',
-        'Should fail if a manifest `src` value is invalid')
-
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
-
-      global.LIFE = { boot: { manifest: {
-        config: { is:'loading', src:'another/valid-src.here.js' }
-      } } }
-      global.LIFE.config = { isBot: true } // don’t load other units
-      require('../dist/life.min.js')
-      a.strictEqual(global.msg,
-        'dist/life.min.js #6478',
-        'Should fail if a manifest `is` value is invalid')
-
-      delete global.LIFE; global.msg = null; purgeCache('../dist/life.min.js')
+    //// Failed custom LIFE.cli.config.manifest.src
+    () => {
+      const code = 2219
+      const test = (path, isMin, text) => {
+        global.LIFE = { boot: { config: { manifest: {
+          cli: { is:'booting', src:'should/not/contain spaces.js' }
+        } } } }
+        require('../' + path)
+        a.notStrictEqual(global.msg, null, "Should fail")
+        if (isMin)
+          text = '#'+code
+        else
+          text = 'boot:validateAPI() #' + code + '\n  '
+            + 'Invalid config.manifest.cli.src '
+            + '"should/n...es.js" fails /^[-.a-z0-9\\/]+.js$|^inline$/'
+        a.strictEqual(global.msg, `${path} ${text}`)
+        delete global.LIFE; global.msg = null; purgeCache('../' + path)
+      }
+      test('src/life-boot.js')
+      test('dist/life.js')
+      test('dist/life.min.js', true)
     },
 
 

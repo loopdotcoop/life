@@ -12,7 +12,7 @@ const
   //// Files for `test.js` to test.
  ,testFiles = [
     require('./unit-tests/life-boot.test.js')(config)
-   ,require('./unit-tests/life-config.test.js')(config)
+   ,require('./unit-tests/life-cli.test.js')(config)
   ]
 
   //// ANSI Colours.
