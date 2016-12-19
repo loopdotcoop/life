@@ -7,10 +7,20 @@
   <meta name="description"
     content="Minimal usage example of LIFE, using single scripts">
 
-  <!-- Load styles (fonts must go first) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Podkova:400,400i,700">
   <link rel="stylesheet" type="text/css" href="../css/life-style.css">
+
+  <!-- LERT("See http://life.loop.coop/#LERT for usage and unminified code") -->
+  <script>!function(s){var A='addEventListener',L='LERT',S='setAttribute',t=top,
+  w=this,d=document,u=navigator.userAgent,n=0,p,i,c,e=function(m,f,l){if(l!=+l)l
+  =m.lineno,f=m.filename,m=m.message;for(i=0,c=w;c=c[['LIFE','pop','is','ready']
+  [i++]];);(4<i&&w.LIFE.pop.warn||t[L])((f+':'+l).match(/[^\/]+?\/?[^\/]+$/)[0]+
+  '\n'+m)};/efox\/(\d|[1-2]\d)\.|Prest/.test(u)?w.onerror=e:!/SIE 9/.test(u)&&w[
+  A]?w[A]('error',e,0):w.attachEvent('onerror',e);w[L]=t[L]=t[L]||function(h){h=
+  98<++n?'99!':n+' '+h;99<n?0:d.body?(p=d.createElement('TT'),p.innerHTML=h,(p.
+  style[S]?p.style[S]('cssText',s):p[S]('style',s)),p.onclick=function(){d.body.
+  removeChild(this)},d.body.appendChild(p)):alert(h)}}('position:fixed!importa'+
+  'nt;position:absolute;display:block;top:40%;left:5%;width:90%;font-size:14px'+
+  ';padding:9px;margin-left:-9px;background:tan;color:#603;z-index:99')</script>
 
   <!-- Load each LIFE source file individually - good for debugging LIFE -->
   <script src="../src/life-boot.js"></script>
@@ -28,7 +38,9 @@
               <a href="index.html">Usage</a> /
               Minimal (Single Scripts)
           </h3>
-          <h2>Minimal usage example of LIFE, using single scripts</h2>
+          <h2>
+            Minimal usage example of LIFE, using single scripts.
+          </h2>
         </div>
 
         <hr>

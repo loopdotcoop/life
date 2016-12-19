@@ -2,15 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>LIFE / Usage</title>
+  <title>LIFE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Loop.Coop Industrial Front End: an open
   source JavaScript application framework.">
 
-  <!-- Load styles (fonts must go first) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Podkova:400,400i,700">
   <link rel="stylesheet" type="text/css" href="css/life-style.css">
+
+  <!-- LERT("See http://life.loop.coop/#LERT for usage and minified code")   -->
+  <script>
+  !function (s) {
+    var A = 'addEventListener'
+      , S = 'setAttribute'
+      , L = 'LERT'
+      , t = top                              // topmost frame’s window object
+      , w = this                             // current frame’s window object
+      , d = document
+      , u = navigator.userAgent
+      , n = 0                                // current number of LERT alerts
+      , p                                    // the popup element
+      , i                                    // iterator, used in `e()`
+      , c                                    // current ref, used in `e()`
+
+      , e = function (m, f, l) {             // handle errors reaching `window`
+          if (l != +l) l = m.lineno, f = m.filename, m = m.message;
+          for (i=0,c=w;c=c[['LIFE','pop','is','ready'][i++]];);
+          (4<i && w.LIFE.pop.warn || t[L])(  // `i` is 5 if LIFE.pop.is.ready
+            (f + ':' + l).match(/[^\/]+?\/?[^\/]+$/)[0] + '\n' + m // trim path
+          )
+        }
+    ;                                        // necessary semicolon!
+
+    //// Listen for errors on the window element. We can’t listen for errors in:
+    //// Opera <=11.5, desktop Safari <=5.0, Safari iOS <=4 or Android Browser
+    //// <=2.3. Tested on Windows XP, OS X 10.6, iOS 3 - 5 and Android 1, 2 & 4.
+    /efox\/(\d|[1-2]\d)\.|Prest/.test(u)     // old Opera is 'Presto'
+      ? w.onerror = e                        // window.onerror, legacy browsers
+      : w[A] && ! /SIE 9/.test(u)            // test for 'MSIE 9'
+        ? w[A]('error', e, 0)                // modern browsers
+        : w.attachEvent('onerror', e)        // IE9
+
+    //// Prefer preexisting top-level LERT(). Otherwise, create LERT() on the
+    //// top window (if using frames), and also the current window.
+    w[L] = t[L] = t[L] || function (h) {     // `h` should be valid HTML
+      h = 98 < ++n ? '99!' : n + ' ' + h     // prepare the popup message
+      99 < n ? 0                             // prevent runaway LERT() calls
+        : d.body                             // if <BODY> is ready...
+          ? (
+            p = d.createElement('TT'),       // ...create a <TT> popup
+            d.body.appendChild(p),
+            p.innerHTML = h,
+            ( p.style[S]                     // if style.setAttribute exists...
+                ? p.style[S]('cssText', s)   // ...use IE 6’s way of styling...
+                : p[S]('style', s)           // ...else add a 'style' attribute
+            ),
+            p.onclick = function () { d.body.removeChild(this) }
+          )
+          : alert(h)                         // <BODY> is not ready, so alert()
+    }
+
+  } (
+    'position:fixed!important;'              // IE 6
+   +'position:absolute;'                     // all other browsers
+   +'display:block;'
+   +'top:40%;'
+   +'left:5%;'
+   +'width:90%;'
+   +'font-size:14px;'
+   +'padding:9px;'
+   +'margin-left:-9px;'
+   +'background:tan;'
+   +'color:#603;'
+   +'z-index:99'
+  )
+  </script>
+
+  <!-- Uncomment the following script to see how `LERT()` handles an error   -->
+  <!-- before the <BODY> element is available.                               -->
+  <!--
+  <script>
+    no_such_function_1();
+  </script>
+  -->
 
 </head>
 <body>
@@ -24,18 +97,39 @@
           <h1><a href="http://life.loop.coop/">LIFE</a></h1>
           <h3 style="margin-top:0">Loop.Coop Industrial Front End: an open
               source JavaScript application framework.</h3>
-          <p>Last modified 14th December 2016</p>
+          <p>Last modified 18th December 2016</p>
         </div>
 
         <hr>
         <ul>
           <li><a href="usage/index.html">Usage Examples</a></li>
+          <li><a href="#LERT">About <tt>LERT()</tt></a></li>
         </ul>
+
+        <hr>
+        <h3 id="LERT">About <tt>LERT()</tt></h3>
+        <p>@todo</p>
 
       </div>
       <div class="life-margin">&nbsp;</div>
     </div>
   </div>
+
+  <!-- Uncomment the following script to see how `LERT()` handles an error   -->
+  <!-- after the <BODY> element becomes available.                           -->
+  <!--
+  <script>
+    no_such_function_2();
+  </script>
+  -->
+
+  <!-- Uncomment the following script to call `LERT()` directly.             -->
+  <!--
+  <script>
+    for (var i=0; i<1; i++) // if `i<500`, then 99 (not 500) popups are shown
+      LERT("See http://life.loop.coop/#LERT for usage and unminified code")
+  </script>
+  -->
 
 </body>
 </html>

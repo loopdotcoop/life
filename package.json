@@ -1,6 +1,6 @@
 {
   "name": "life",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Loop.Coop Industrial Front End: an open source JavaScript application framework.",
   "main": "dist/life.js",
   "scripts": {

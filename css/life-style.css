@@ -1,4 +1,43 @@
-/* Typography */
+/* FONT IMPORTS (must go before any other CSS)                                */
+/* - WOFF2s need Chrome 36+, Firefox 39+ or Opera 23+ (tested on Win XP).     */
+/* - WOFFs need Android 4.4+, Chrome 5+, Edge 13+, Firefox 3.5+, IE 9+,       */
+/*   Opera 11.1+, Safari (desktop or iOS) 5.1+.                               */
+/* From css-tricks.com/snippets/css/using-font-face/#article-header-id-1      */
+@font-face {
+  font-family: 'Open Sans';
+  font-style:  normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans')
+   ,url(open-sans-regular.woff2) format('woff2')
+   ,url(open-sans-regular.woff)  format('woff')
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style:  normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold')
+   ,url(open-sans-bold.woff2) format('woff2')
+   ,url(open-sans-bold.woff)  format('woff')
+}
+@font-face {
+  font-family: 'Podkova';
+  font-style:  normal;
+  font-weight: 400;
+  src: local('Podkova'), local('Podkova-Regular')
+   ,url(podkova-regular.woff2) format('woff2')
+   ,url(podkova-regular.woff)  format('woff')
+}
+@font-face {
+  font-family: 'Podkova';
+  font-style:  normal;
+  font-weight: 700;
+  src: local('Podkova Bold'), local('Podkova-Bold')
+   ,url(podkova-bold.woff2) format('woff2')
+   ,url(podkova-bold.woff)  format('woff')
+}
+
+
+/* TYPOGRAPHY */
 body {
     margin: 0 3em;
     background: #d8d8d8;
