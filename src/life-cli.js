@@ -88,7 +88,7 @@ function SAFE(v,t){return t=t||typeof v,null==v||"number"==t||"boolean"==t//@CUT
 ?"`"+v+"`":(v+="",'"'+(17>v.length?v:v.slice(0,8)+"..."+v.slice(-5))+'"')}//@CUT
 function COPY(s,f,k,v){for(k in f){v=f[k];if('object'==typeof v){if(null==//@CUT
 s[k])s[k]='[object Array]'==Object.prototype.toString.call(v)?[]:{}       //@CUT
-COPY(s[k],v)}else{if(null==s[k])s[k]=v}}};function FAIL(f,t,c){(ROOT.w80a //@CUT
+COPY(s[k],v)}else{if(null==s[k])s[k]=v}}};function FAIL(f,t,c){(ROOT.LERT //@CUT
 ||ROOT.alert||NOOP)(FILE+' '+(t?f+'#'+c+'\n  '+t:'#'+f));return t?c:f}    //@CUT
 function NOOP(){}                                                         //@CUT
 

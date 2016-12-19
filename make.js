@@ -88,7 +88,7 @@ maxs.push(
  +"  }\n"
  +"}\n"
  +"function FAIL (fn, tx, cd) { // with 1 arg, `fn` is treated as `cd`\n"
- +"  (ROOT.w80a||ROOT.alert||NOOP)(FILE+' '+(tx?fn+'#'+cd+'\\n  '+tx:'#'+fn))\n"
+ +"  (ROOT.LERT||ROOT.alert||NOOP)(FILE+' '+(tx?fn+'#'+cd+'\\n  '+tx:'#'+fn))\n"
  +"  return (tx ? cd : fn)\n"
  +"}\n"
  +"function NOOP () {} // no operation\n\n"
